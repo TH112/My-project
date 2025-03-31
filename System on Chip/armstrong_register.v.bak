@@ -1,0 +1,46 @@
+module armstrong_register (
+    input wire clk,             // Clock signal
+    input wire reset,           // Reset signal
+    input wire chipselect,      // Chip select signal
+    input wire write_n,         // Write enable (active low)
+    input wire read_n,          // Read enable (active low)
+    input wire [7:0] data_in,   // Input data bus
+    output reg [7:0] data_out   // Output data bus (result of Armstrong check)
+);
+    // Internal register to store the input number
+    reg [7:0] stored_number;
+    reg [7:0] armstrong_result; // Result of Armstrong number check (1 or 0)
+
+    // Register processing
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            // Clear stored number and result on reset
+            stored_number <= 8'b0;
+            armstrong_result <= 8'b0;
+            data_out <= 8'b0;
+        end else if (chipselect) begin
+            if (!write_n) begin
+                // Store the input number when write is active
+                stored_number <= data_in;
+
+                // Calculate if the stored number is an Armstrong number
+                reg [3:0] hundreds, tens, ones;
+                reg [23:0] sum;  // Extended bit width to prevent overflow
+                
+                hundreds = stored_number / 100;
+                tens = (stored_number % 100) / 10;
+                ones = stored_number % 10;
+                
+                sum = (hundreds * hundreds * hundreds) + 
+                      (tens * tens * tens) + 
+                      (ones * ones * ones);
+
+                // Set the result based on comparison
+                armstrong_result <= (sum == stored_number) ? 8'b1 : 8'b0;
+            end else if (!read_n) begin
+                // Output the Armstrong result when read is active
+                data_out <= armstrong_result;
+            end
+        end
+    end
+endmodule

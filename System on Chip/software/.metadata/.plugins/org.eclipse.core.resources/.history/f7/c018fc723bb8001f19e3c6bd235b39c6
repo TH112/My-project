@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include "io.h"
+#include "system.h"
+#include <unistd.h>
+#include <stdint.h>
+
+// Pointers to sonic sensor and hex displays
+uint32_t *sonic = (uint32_t*)SONIC_0_BASE;
+uint32_t *hex0 = (uint32_t*)HEX_0_BASE;
+uint32_t *hex1 = (uint32_t*)HEX_1_BASE;
+uint32_t *hex2 = (uint32_t*)HEX_2_BASE;
+uint32_t *hex3 = (uint32_t*)HEX_3_BASE;
+uint32_t *hex4 = (uint32_t*)HEX_4_BASE;
+uint32_t *hex5 = (uint32_t*)HEX_5_BASE;
+
+int main() {
+    while(1) {
+        // Read sonic sensor distance
+        uint32_t distance = *sonic;
+
+        // Extract decimal digits (base 10)
+        uint8_t digit0 = distance % 10;         // Units place
+        uint8_t digit1 = (distance / 10) % 10; // Tens place
+        uint8_t digit2 = (distance / 100) % 10; // Hundreds place
+        uint8_t digit3 = (distance / 1000) % 10; // Thousands place
+        uint8_t digit4 = (distance / 10000) % 10; // Ten-thousands place
+        uint8_t digit5 = (distance / 100000) % 10; // Hundred-thousands place
+
+        // Display digits on hex displays
+        *hex0 = digit0;
+        *hex1 = digit1;
+        *hex2 = digit2;
+        *hex3 = digit3;
+        *hex4 = digit4;
+        *hex5 = digit5;
+
+        // Small delay to prevent too rapid updates
+        usleep(100000);  // 100ms delay
+    }
+}

@@ -1,0 +1,18 @@
+module part1
+(
+	input CLOCK_50,
+	input	[1:0] KEY,
+	input	 SW,
+	output [0:6] HEX0,HEX1,HEX2,HEX3,HEX4,HEX5
+);
+system nios_system(
+.clk_clk(CLOCK_50),
+.sonic_0_conduit_end_export({22'd0, SW}), 
+.hex_0_conduit_end_hex(HEX0),
+.hex_1_conduit_end_hex(HEX1),
+.hex_2_conduit_end_hex(HEX2),
+.hex_3_conduit_end_hex(HEX3),
+.hex_4_conduit_end_hex(HEX4),
+.hex_5_conduit_end_hex(HEX5) 
+);
+endmodule

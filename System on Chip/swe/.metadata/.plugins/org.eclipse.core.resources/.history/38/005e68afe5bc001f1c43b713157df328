@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include "io.h"
+#include "system.h"
+#include <unistd.h>
+#include <stdint.h>
+
+// Định nghĩa các địa chỉ cơ sở
+#define ARM_0_BASE 0x11019  // Địa chỉ của ARM trong hệ thống
+#define SWITCH_0_BASE 0x0001_1014  // Địa chỉ của switch
+#define HEX_0_BASE 0x0001_1010  // Địa chỉ của HEX
+
+// Con trỏ đến các mô-đun switch và hex
+uint32_t *sonic = (uint32_t*)SWITCH_0_BASE;  // Đọc giá trị từ switch
+uint32_t *hex0 = (uint32_t*)HEX_0_BASE;      // Ghi giá trị ra HEX
+
+int main() {
+    while(1) {
+        // Đọc dữ liệu từ switch
+        int y = IORD(SWITCH_0_BASE, 0);  // Đọc giá trị từ switch
+
+        // Gửi giá trị đọc được vào ARM (nếu cần thiết)
+        IOWR(ARM_0_BASE, 0, y);  // Gửi giá trị y từ switch vào ARM
+
+        // In giá trị ra màn hình (Debugging)
+        printf("Giá trị y: %d\n", y);
+
+        // Ghi giá trị vào HEX để hiển thị
+        *hex0 = y;
+
+        // Delay 100ms
+        usleep(100000);  // 100ms
+    }
+
+    return 0;
+}

@@ -1,0 +1,12 @@
+../Core/Src/main.c:87:7:get_temp	16	static
+../Core/Src/main.c:98:5:main	104	static
+../Core/Src/main.c:180:6:SystemClock_Config	88	static
+../Core/Src/main.c:226:13:MX_ADC1_Init	24	static
+../Core/Src/main.c:278:13:MX_USART1_UART_Init	8	static
+../Core/Src/main.c:309:13:MX_DMA_Init	16	static
+../Core/Src/main.c:330:13:MX_GPIO_Init	40	static
+../Core/Src/main.c:366:6:task_01	16	static
+../Core/Src/main.c:387:6:task_02	32	static
+../Core/Src/main.c:408:6:task_03	16	static
+../Core/Src/main.c:428:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:445:6:Error_Handler	4	static,ignoring_inline_asm

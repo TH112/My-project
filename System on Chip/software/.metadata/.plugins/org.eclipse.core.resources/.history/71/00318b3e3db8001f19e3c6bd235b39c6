@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include "io.h"
+#include "system.h"
+#include <unistd.h>
+#include <stdint.h>
+#define ARM_0_BASE 0x11019
+// Pointers to sonic sensor and hex displays
+uint32_t *sonic = (uint32_t*)SWITCH_0_BASE;
+uint32_t *hex0 = (uint32_t*)HEX_0_BASE;
+
+
+int main() {
+    while(1) {
+
+    IOWR(ARM_0_BASE, 0, sonic);
+    IORD(ARM_0_BASE, 0 );
+        usleep(100000);  // 100ms delay
+    }
+}

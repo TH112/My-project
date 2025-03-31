@@ -1,0 +1,45 @@
+module armstrong_number_checker(
+    input clk,           // Clock
+    input reset_n,       // Reset active low
+    input [7:0] sw,      // Đầu vào từ switch 8-bit dạng nhị phân
+    output reg is_armstrong // Đầu ra để chỉ ra có phải số Armstrong không
+);
+
+    // Các thanh ghi để lưu trữ các chữ số
+    reg [3:0] digit1, digit2, digit3;
+    reg [15:0] cube_sum;
+    reg [7:0] decimal_value; // Giá trị thập phân chuyển đổi từ nhị phân
+
+    // Chuyển đổi nhị phân sang thập phân
+    always @(*) begin
+        decimal_value = sw;
+    end
+
+    // Khối logic đồng bộ với clock và reset
+    always @(posedge clk or negedge reset_n) begin
+        // Kiểm tra reset
+        if (!reset_n) begin
+            // Đặt lại trạng thái khi reset
+            is_armstrong <= 1'b0;
+            digit1 <= 4'b0;
+            digit2 <= 4'b0;
+            digit3 <= 4'b0;
+            cube_sum <= 16'b0;
+        end
+        else begin
+            // Tách các chữ số từ số đầu vào thập phân
+            digit1 <= decimal_value % 10;          // Chữ số hàng đơn vị
+            digit2 <= (decimal_value / 10) % 10;   // Chữ số hàng chục
+            digit3 <= decimal_value / 100;         // Chữ số hàng trăm
+
+            // Tính tổng lũy thừa bậc 3 của các chữ số
+            cube_sum <= (digit1 * digit1 * digit1) + 
+                        (digit2 * digit2 * digit2) + 
+                        (digit3 * digit3 * digit3);
+
+            // Kiểm tra xem tổng lũy thừa có bằng số ban đầu không
+            is_armstrong <= (cube_sum == decimal_value);
+        end
+    end
+
+endmodule
